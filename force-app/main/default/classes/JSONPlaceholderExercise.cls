@@ -1,8 +1,8 @@
 public class JSONPlaceholderExercise {
 
-    private static CCA_Integration__mdt config = [SELECT Id, Base_Url__c, TimeoutDuration__c FROM CCA_Integration__mdt LIMIT 1];    
-    private static String BASE_URL = config.Base_Url__c; 
-    private static Integer JSON_EXERCISE_TIMEOUT = config.TimeoutDuration__c.intValue();
+    private static CCA_Integration__mdt config = [SELECT Id, base_url__c, TimeoutDuration__c FROM CCA_Integration__mdt LIMIT 1];    
+    private static String base_url = config.base_url__c; 
+    private static Integer timeout_duration = config.TimeoutDuration__c.intValue();
 
     /* this doesn't work because it's all static methods
      * Could change to non static, but to keep it as close to the original, 
@@ -14,9 +14,9 @@ public class JSONPlaceholderExercise {
         
     private static void fetchEndpointParams() {
         try {
-            CCA_Integration__mdt config = [SELECT Id, Base_Url__c FROM CCA_Integration__mdt LIMIT 1];
-            BASE_URL = config.Base_Url__c; 
-            JSON_EXERCISE_TIMEOUT = config.TimeoutDuration__c.intValue();
+            CCA_Integration__mdt config = [SELECT Id, base_url__c FROM CCA_Integration__mdt LIMIT 1];
+            base_url = config.base_url__c; 
+            timeout_duration = config.TimeoutDuration__c.intValue();
         } catch (Exception e) {
             throw new JSONPlaceholderExerciseCustomException('Error fetching base URL: ' + e.getMessage());
         }
@@ -25,16 +25,16 @@ public class JSONPlaceholderExercise {
 
     /**
      * Shared method to build the HttpRequest
-     * @param path - path to add to BASE_URL
+     * @param path - path to add to base_url
      * @param method - GET, POST, etc...
      * @param body - request body as a JSON string; if not needed then pass in null
      * @return HttpRequest for the callout
      */
     private static HttpRequest buildRequest(String path, String method, String body) {
         HttpRequest req = new HttpRequest(); 
-        req.setEndpoint(BASE_URL + path);
+        req.setEndpoint(base_url + path);
         req.setMethod(method);
-        req.setTimeout(JSON_EXERCISE_TIMEOUT);
+        req.setTimeout(timeout_duration);
         if(body != null) {
             req.setBody(body);
         }
@@ -190,7 +190,7 @@ public class JSONPlaceholderExercise {
     /**
      * wrapper class to bulkify new posts
      */
-    public class newPostRQ {
+    public class NewPostRQ {
         public String title;
         public String body;
         public Integer userId;
